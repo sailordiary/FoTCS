@@ -1,0 +1,112 @@
+% !TeX program = xelatex
+\documentclass[12pt,a4paper]{ctexart}
+\usepackage{amsfonts,amsmath,amssymb,graphicx,url}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{multido}
+\allowdisplaybreaks
+\setlist[enumerate]{font=\bfseries}
+
+% Old Stuff
+%%\oddsidemargin=0.15in
+%%\evensidemargin=0.15in
+%%\topmargin=-.5in
+%%\textheight=9in
+%%\textwidth=6.25in
+
+\setlength{\oddsidemargin}{.1in}
+\setlength{\evensidemargin}{.1in}
+\setlength{\topmargin}{-0.4in}
+
+% From TeX-SE
+\usepackage{enumitem}
+\newcommand{\bitem}{\item\hspace*{1em}\ignorespaces}
+\newenvironment{turing}[2]
+{\begin{enumerate}[leftmargin=0pt,labelsep=0pt,align=left,parsep=0pt]
+		\item[$#1={}$]``\ignorespaces#2
+		\begin{enumerate}[nosep,align=left,labelwidth=1.5em,label=\bfseries\arabic{*}.,ref=\arabic{*}]}
+		{\unskip''\end{enumerate}\end{enumerate}}
+
+\newcommand{\heading}[5]{
+   \renewcommand{\thepage}{\arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 6.2in { {\bf B62005Y-02 理论计算机科学基础}
+     	 \hfill #2 }
+       \vspace{4mm}
+       \hbox to 6.2in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 6.2in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcommand{\handout}[3]{\heading{#1}{#2}{主讲教师：杨光}{张远航 \textsc{2015K8009929045}}{#3}}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{0.1in}
+
+\def\eps {\varepsilon}
+\def\x{\texttt{x}}
+\def\a{\texttt{a}}
+\def\b{\texttt{b}}
+\def\ling{\texttt{0}}
+\def\yi{\texttt{1}}
+\def\jing{\texttt{\#}}
+\def\kong{\sqcup}
+\def\jujue{q_\mathrm{reject}}
+
+\newcommand{\rep}{\multido{\i=1+1}}
+
+\begin{document}
+\handout{2}{\today}{Solutions to Homework \# 3}
+
+\begin{enumerate}
+\item[Sipser 3.1](d) $q_1\rep{6}{\ling}$, $\kong q_2\rep{5}{\ling}$, $\kong\x q_3\rep{4}{\ling}\kong$, $\kong\x\ling q_4\rep{3}{\ling}\kong$, $\kong\x\ling\x q_3\rep{2}{\ling}$, $\kong\x\ling\x\ling q_4\ling$, $\kong\x\rep{2}{\ling\x}q_3\kong$, $\kong\x\ling\x\ling q_5\x\kong$, $\kong\x\ling\x q_5\ling\x\kong$, $\kong\x\ling q_5\x\ling\x\kong$, $\kong\x q_5\rep{2}{\ling\x}\kong$, $\kong q_5\x\rep{2}{\ling\x}\kong$, $q_5\kong\x\rep{2}{\ling\x}\kong$, $\kong q_2\x\rep{2}{\ling\x}\kong$, $\kong\x q_2\rep{2}{\ling\x}\kong$, $\kong\x\x q_3\x\ling\x\kong$, $\kong\rep{3}{\x}q_3\ling\x\kong$, $\kong\rep{3}{\x}\ling q_4\x\kong$, $\kong\rep{3}{\x}\ling\x q_4\kong$, $\kong\rep{3}{\x}\ling\x\kong\jujue$.
+
+\item[Sipser 3.2](d) $q_1\yi\ling\jing\yi\yi$, $\x q_3\ling\jing\yi\yi$, $\x\ling q_3\jing\yi\yi$, $\x\ling\jing q_5\yi\yi$, $\x\ling q_6\jing\x\yi$, $\x q_7\ling\jing\x\yi$, $q_7\x\ling\jing\x\yi$, $\x q_1\ling\jing\x\yi$, $\x\x q_2\jing\x\yi$, $\x\x\jing q_4\x\yi$, $\x\x\jing\x q_4\yi$, $\x\x\jing\x\yi\jujue$.
+
+\item[Sipser 3.8](b) The following machine $M$ works:
+\begin{turing}{M}{On input string $w$:}
+	\item Scan the tape and mark the first \yi{} which has not been marked. If no unmarked \yi{} is found, go to step 5. Otherwise, move the head back to the front of the tape.
+	\item Scan the tape and mark the first \ling{} which has not been marked. If no unmarked \ling{} is found, reject.
+	\item Move on to mark the next unmarked \ling. If no such unmarked \ling{} is found, reject.
+	\item Move the head back to the front of the tape and go to step 1.
+	\item Move the head back to the front of the tape. Scan the tape to see if there is any unmarked \ling{} found. If yes, reject. Otherwise, accept.
+\end{turing}
+
+\item[Sipser 4.1]
+\begin{enumerate}
+	\item[(a)] Yes, because $M$ on input \ling\yi\ling\ling{} ends in an accept state.
+	\item[(b)] No, because $M$ on input \ling\yi\yi{} ends in a non-accept state.
+	\item[(c)] No, because the input is not in correct form: the second component of the input is missing.
+	\item[(d)] No, because the input is not in correct form: the first component should be a regular expression but not a \textsf{DFA}.
+	\item[(e)] No, because $M$ accepts $\eps$ and hence, $L(M)\ne\emptyset$.
+	\item[(f)] Yes, because $L(M) = L(M)$.
+\end{enumerate}
+\item[Sipser 4.2]
+The problem of testing whether a \textsf{DFA} and a regular expression are equivalent can be expressed by the following language:
+\[EQ_{\mathsf{DFA}-\mathsf{REX}}=\{\langle M,r \rangle \mid M\text{ is a \textsf{DFA} and }r\text{ is a regular expression}\}\]
+and $L(M) = L(r)$. We can prove that the language $EQ_{\mathsf{DFA}-\mathsf{REX}}$ is decidable by constructing a \textsf{TM} $P$ that decides it as follows:
+\begin{turing}{P}{On input $\langle M,r \rangle$:}
+	\item Convert the regular expression $r$ into a \textsf{DFA} $M_r$ by using the procedure described in Theorem 1.28.
+	\item Apply the algorithm given in Theorem 4.5 to decide whether $\langle M,M_r \rangle\in EQ_{\mathsf{DFA}}$.
+	\item If $\langle M,M_r \rangle\in EQ_{\mathsf{DFA}}$ then accept, else reject.
+\end{turing}
+
+\item[Sipser 4.3]
+Let $M_{\Sigma^*}$ be a \textsf{DFA} that accepts $\Sigma^*$; then for every \textsf{DFA} $A$,
+\[A\in ALL_{\mathsf{DFA}}\Leftrightarrow\langle A,M_{\Sigma^*} \rangle\in EQ_{\mathsf{DFA}}.\]
+Therefore, to decide whether $A \in ALL_{\mathsf{DFA}}$, we just need to decide whether $\langle A,M_{\Sigma^*} \rangle\in EQ_{\mathsf{DFA}}$. The latter can be done by applying the proof in Theorem 4.5. Thus $ALL_{\mathsf{DFA}}$ is decidable.
+\item[Sipser 4.4]
+Since $A_{\eps\mathsf{CFG}}$ is just a special case of $A_{\mathsf{CFG}}$, it is possible to adapt $\mathsf{TM}$ $S$ for $A_{\eps\mathsf{CFG}}$ as follows.
+\begin{turing}{S}{On input $(G,\eps)$, where $G$ is a \textsf{CFG} and $\eps$ is an empty string:}
+	\item Convert $G$ to an equivalent grammar in Chomsky normal form.
+	\item If ``$S\to\eps$" is a production rule in Chomsky normal form, accept; if not, reject.
+\end{turing}
+\end{enumerate}
+\end{document}
